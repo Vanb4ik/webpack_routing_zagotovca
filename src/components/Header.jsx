@@ -41,12 +41,7 @@ export class Header extends React.Component{
 
                                     <Link to="/">Home</Link>
                                 </li>
-                                <li className="lincItem">
-                                    <Link to="/about">About</Link>
-                                </li>
-                                <li className="lincItem">
-                                    <Link to="/inbox">Inbox</Link>
-                                </li>
+
                             </ul>
                             <ul className="nav navbar-nav navbar-right">
                                 <li >

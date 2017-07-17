@@ -9,6 +9,7 @@ export class InboxPage extends React.Component{
         this.state = {
             mass
         };
+
     }
 
     sowFullContent(massages){

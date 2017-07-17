@@ -1,30 +1,47 @@
 import React from "react";
 import "react-dom";
-import mass from "../mass.json";
 
-export const Message = React.createClass({
-    getInitialState(){
-        return{
-            Info:""
+
+export class Message extends React.Component{
+    constructor(props) {
+        super(props);
+        this.state = {
+            mass:[]
         };
-    },
-    setFullInfo:function () {
+    }
+
+    componentDidMount() {
+        return fetch('http://localhost:8081/api/users/1/10')
+            .then(response => response.json())
+            .then(response=>{
+                this.setState({mass:response.data});
+                // this.setFullInfo();
+                // console.log("getInitialContent +");
+            })
+            .catch(function(err) {
+                console.log('Fetch Error :-S', err);
+            });
+    }
+
+    setFullInfo(){
         var messId = this.props.match.params.id;
-        console.dir(this.props);
+        // console.dir("setFullInfo +");
+        console.log(messId,"- messId");
+        // console.log(this.state.mass);
 
-        for(var i=0;i<mass.length;i++){
+        for(let i=0;i<this.state.mass.length;i++){
 
-            if (mass[i].id==messId){
-                /*this.setState({Info:mass[i].fullInfo});*/
-                return mass[i].fullInfo;
+            if (this.state.mass[i].id==messId){
+                return this.state.mass[i].fullInfo;
             }
         }
+        return <h3>:-\</h3>
+    };
 
-    },
-    render:function () {
+    render () {
 
         return(
             <div>{this.setFullInfo()}</div>
         )
     }
-});
+}
