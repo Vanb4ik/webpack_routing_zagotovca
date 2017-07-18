@@ -1,44 +1,56 @@
 import React from "react";
+import {
+    BrowserRouter as Router,
+    Route,
+    Link
+} from 'react-router-dom';
 import {AutorPrevey} from "./AutorPrevey";
-import {HomePaginations} from "./HomePaginations"
-
+import {Paginations} from "./Paginations";
 
 export class Home extends React.Component{
     constructor(props) {
         super(props);
         this.state = {
-            articlesArray:[],        //масив статів
-            pageArray:[],            //масив сторінок
-            totalPages:0,       //загальна кількість сторінок
-            currentPage:1,      //поточна група сторінок
-            numberOfTime:5      //кількість елементів на сторінці
+            activePage:1,
+            articlesArray:[],       //масив статів
+            pageArray:[],           //масив сторінок
+            totalPages:0,           //загальна кількість сторінок
+            currentPage:1,          //поточна група сторінок
+            numberOfTime:5          //кількість елементів на сторінці
         };
-
     }
-
-    componentDidMount(){
-        fetch(`http://localhost:8081/api/users/
-        ${this.state.currentPage}/${this.state.numberOfTime}`)
+    get() {
+        const requestURL = `http://localhost:8081/api/users/${this.state.currentPage}/${this.state.numberOfTime}`;
+        fetch(requestURL)
             .then(response => response.json())
             .then(response=>{
                 console.log(response);
-                this.setState({
-                    articlesArray:response.data,
-                    totalPages:response.totalPages
-                });
                 var pageNumbers=[];
-                for(let i=0;i<this.state.totalPages;i++){
+                for(let i=0;i< response.totalPages;i++){
                     pageNumbers.push(i);
                 }
-                this.setState({pageArray:pageNumbers});
+
+                this.setState({
+                    articlesArray:response.data,
+                    totalPages:response.totalPages,
+                    pageArray:pageNumbers
+                });
             })
             .catch(function(err) {
                 console.log('Fetch Error :-S', err);
             });
-
     }
-    componentDidUpdate(){
+    componentDidMount(){
+        this.get();
+    }
 
+
+    sowActivePage(num){
+        this.setState({currentPage:num,activePage:num}, () => {
+            console.log(this.state.currentPage+"-currentPage");
+            console.log(num+"num");
+            this.get();
+        });
     }
 
     sowFullContent(massages){
@@ -47,7 +59,7 @@ export class Home extends React.Component{
     }
 
     render(){
-        const {articlesArray,pageArray} = this.state;
+        const {articlesArray,pageArray,activePage} = this.state;
         return(
             <div className="list-group">
                 <div >{
@@ -64,15 +76,22 @@ export class Home extends React.Component{
                     })
                 }
                 </div>
-                <div>{
+                <div>
                     <ul className="pagination">
-                        <li><a href="#">1</a></li>
-                        <li><a href="#">2</a></li>
-                        <li><a href="#">3</a></li>
-                        <li><a href="#">4</a></li>
-                        <li><a href="#">5</a></li>
+                        {
+                            pageArray.map(mass=>{
+                             return (
+                                 <Paginations
+                                     key={mass}
+                                     activePage={activePage}
+                                     onClick={this.sowActivePage.bind(this,mass+1)}>
+                                     {mass}
+                                 </Paginations>
+                             )
+                         })
+                        }
+
                     </ul>
-                }
                 </div>
             </div>
 

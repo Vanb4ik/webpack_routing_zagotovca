@@ -20,6 +20,7 @@ class RouteConfigExample extends React.Component{
                     <Header/>
                     <div className="container">
                         <Route exact path="/" component={Home}/>
+                        {/*<Route exact path="/:num" component={Home}/>*/}
                         <Route exact path="/messages/:id" component={Message}/>
                     </div>
                 </div>
