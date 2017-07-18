@@ -47,10 +47,11 @@ export class Home extends React.Component{
 
     sowActivePage(num){
         this.setState({currentPage:num,activePage:num}, () => {
-            console.log(this.state.currentPage+"-currentPage");
-            console.log(num+"num");
+            // console.log(this.state.currentPage+"-currentPage");
+            // console.log(num+"-num");
             this.get();
         });
+
     }
 
     sowFullContent(massages){
@@ -59,7 +60,7 @@ export class Home extends React.Component{
     }
 
     render(){
-        const {articlesArray,pageArray,activePage} = this.state;
+        const {articlesArray,pageArray,activePage,totalPages} = this.state;
         return(
             <div className="list-group">
                 <div >{
@@ -77,21 +78,12 @@ export class Home extends React.Component{
                 }
                 </div>
                 <div>
-                    <ul className="pagination">
-                        {
-                            pageArray.map(mass=>{
-                             return (
-                                 <Paginations
-                                     key={mass}
-                                     activePage={activePage}
-                                     onClick={this.sowActivePage.bind(this,mass+1)}>
-                                     {mass}
-                                 </Paginations>
-                             )
-                         })
-                        }
-
-                    </ul>
+                    <Paginations
+                        totalPages = {totalPages}
+                        activePage={activePage}
+                        pageArray = {pageArray}
+                        onClick={this.sowActivePage.bind(this)}
+                    />
                 </div>
             </div>
 
